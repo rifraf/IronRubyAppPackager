@@ -1,0 +1,50 @@
+h1. IRPackager
+
+IRPackager is a Ruby library that packages a Ruby application into a
+standalone .exe file that embeds all of the application source, library
+and GEM files in embedded resources within the executable.
+
+The executable runs using IronRuby.
+
+Run-time dependencies:
+
+* .Net version 2 needs to be installed on any PC that runs the executable
+* IronRuby (though the DLLs can just be copied to the folder containing the executable)
+
+Package-time dependencies
+
+* "Serfs":http://github.com/rifraf/Serfs
+* "IREmbeddedApp":http://github.com/rifraf/IronRubyEmbeddedApps/
+* Vendorize
+* .Net version 2
+* (Optional) "ILMerge":http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
+
+h2. Quick run-through
+
+Given an existing Ruby application (that runs with IronRuby), just run
+@ir -rvendorize app.rb@. This will copy any @require@ files into the
+folder @_vendor_@. You can run the program several times with different
+options if the required files depend on the options. Or just run your tests...
+
+Then run IRPackager which will generate a C# project that embeds your
+source files and @_vendor_@ files. It will build the project and deliver
+you a nice shiny .exe file.
+
+....... detail to follow ......
+
+h2. TODOs
+
+* Add the code....!
+* Obscure files
+* Zip/unzip resources
+* Check Ocra/rubyscript2exe for edge cases / options
+* .net 3.5/4 options
+* ILMerge
+* Allow user-supplied program.cs file
+* Allow user-supplied .csproj file
+
+h2. License
+
+Copyright (c) 2010 David Lake (rifraf -> rifraf.net)
+
+Released under the MIT license. See LICENSE file for details.
