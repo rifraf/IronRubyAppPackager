@@ -34,6 +34,7 @@ Then run IRPackager which will generate a C# project that embeds your source fil
 h2. TODOs
 
 * Add the code....!
+* GEMify
 * Obscure files
 * Zip/unzip resources
 * Check Ocra/rubyscript2exe for edge cases / options
