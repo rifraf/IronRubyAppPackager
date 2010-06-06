@@ -1,6 +1,7 @@
 module IRPackager
   require 'fileutils'
   require 'date'
+  require 'msbuild_helper'
 
   # Expects first arg to be the name of the project (main.rb) and
   # any other args to be a list of folders to include. Defaults to
@@ -25,12 +26,14 @@ module IRPackager
     project_name = File.basename(project, ".rb")
     Dir.mkdir(image_folder) unless File.exists?(image_folder)
 
+    create_assemblyinfo(image_folder, project_name)
+
+    app_dir = clone_source_files(image_folder, project, folders)
+    create_program_cs(image_folder, project_name, app_dir, folders)
     clone_build_support(image_folder)
 
-    app_dir       = clone_source_files(image_folder, project, folders)
-    assembly_info = create_assemblyinfo(image_folder, project_name)
-    program_file  = create_program_cs(image_folder, project_name, app_dir, folders)
-    csproj_file   = create_csproj(image_folder, project_name, app_dir, folders)
+    csproj_file   = create_csproj(image_folder, project_name)
+    synchronize_csproj(csproj_file, app_dir)
     
   end
 
@@ -91,7 +94,7 @@ module IRPackager
     return ret
   end
 
-  def self.create_csproj(image_folder, project_name, app_dir, folders)
+  def self.create_csproj(image_folder, project_name)
     destdir  = image_folder
     destfile = File.join(destdir, "#{project_name}.csproj")
     unless File.exists?(destfile)
@@ -104,4 +107,14 @@ module IRPackager
     end
     return destfile
   end
+
+  def self.synchronize_csproj(csproj_file, app_dir)
+    require 'csproj_helper'
+    sync_csproj(csproj_file, app_dir)
+  end
+
+  def self.build_csproject(image_folder, project)
+    MSBuildHelper.build(image_folder, project)
+  end
+  
 end

@@ -49,17 +49,6 @@
     <Compile Include="PROJECTNAME.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="App\PROJECTNAME.rb" />
-    <!--EmbeddedResource Include="App\_Vendor_\drb.rb" />
-    <EmbeddedResource Include="App\_Vendor_\drb\drb.rb" />
-    <EmbeddedResource Include="App\_Vendor_\drb\eq.rb" />
-    <EmbeddedResource Include="App\_Vendor_\drb\invokemethod.rb" />
-    <EmbeddedResource Include="App\_Vendor_\fcntl.rb" />
-    <EmbeddedResource Include="App\_Vendor_\microtest.rb" />
-    <EmbeddedResource Include="App\_Vendor_\socket.rb" />
-    <EmbeddedResource Include="App\_Vendor_\thread.rb" /-->
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if exist ..\prebuild.bat ..\prebuild.bat</PreBuildEvent>
