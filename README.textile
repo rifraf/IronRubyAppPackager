@@ -1,8 +1,6 @@
 h1. IRPackager
 
-IRPackager is a Ruby library that packages a Ruby application into a
-standalone .exe file that embeds all of the application source, library
-and GEM files in embedded resources within the executable.
+IRPackager is a Ruby library that packages a Ruby application into a standalone .exe file that embeds all of the application source, library and GEM files in embedded resources within the executable.
 
 The executable runs using IronRuby.
 
@@ -21,14 +19,15 @@ Package-time dependencies
 
 h2. Quick run-through
 
-Given an existing Ruby application (that runs with IronRuby), just run
-@ir -rvendorize app.rb@. This will copy any @require@ files into the
-folder @_vendor_@. You can run the program several times with different
-options if the required files depend on the options. Or just run your tests...
+Given an existing Ruby application (that runs with IronRuby), just run @ir -rvendorize app.rb@.
 
-Then run IRPackager which will generate a C# project that embeds your
-source files and @_vendor_@ files. It will build the project and deliver
-you a nice shiny .exe file.
+This will copy any @require@ files into the folder @_vendor_@.
+
+You can run the program several times with different options if the required files depend on the options.
+
+Or just run your tests...
+
+Then run IRPackager which will generate a C# project that embeds your source files and @_vendor_@ files. It will build the project and deliver you a nice shiny .exe file.
 
 ....... detail to follow ......
 
