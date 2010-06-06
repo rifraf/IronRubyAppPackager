@@ -18,7 +18,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IREmbeddedApp, Version=0.1.0.11545, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="IREmbeddedApp, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\IREmbeddedApp.dll</HintPath>
     </Reference>
@@ -37,7 +37,7 @@
     <Reference Include="Microsoft.Scripting.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Serfs, Version=0.1.0.11539, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Serfs, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\Serfs.dll</HintPath>
     </Reference>
