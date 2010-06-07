@@ -1,4 +1,6 @@
-
+#
+# Support for building a csproj file
+#
 module MSBuildHelper
 
   def self.find_msbuild
@@ -29,5 +31,6 @@ module MSBuildHelper
     Dir.chdir(image_folder) do
       puts `#{self.find_msbuild} #{File.basename(project, '.rb')}.csproj`
     end
+    return File.join(image_folder, 'bin').gsub(/\//,'\\')
   end
 end

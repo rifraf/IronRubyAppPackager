@@ -2,6 +2,7 @@ module IRPackager
   require 'fileutils'
   require 'date'
   require 'msbuild_helper'
+  require 'ilmerge_helper'
 
   # Expects first arg to be the name of the project (main.rb) and
   # any other args to be a list of folders to include. Defaults to
@@ -114,7 +115,12 @@ module IRPackager
   end
 
   def self.build_csproject(image_folder, project)
-    MSBuildHelper.build(image_folder, project)
+    location = MSBuildHelper.build(image_folder, project)
+    if ILMergeHelper.build(location, project)
+      puts "*** Created #{File.basename(project,'.rb')}.exe (single file) ***"
+    else
+      puts "*** Created #{location}\\#{File.basename(project,'.rb')}.exe (plus 2 support DLLs) ***"
+    end
   end
   
 end
