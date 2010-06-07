@@ -1,5 +1,7 @@
 h1. IRPackager
 
+*** NOTE : Work in progress. Only tested on a VERY simple application so far *******
+
 IRPackager is a Ruby library that packages a Ruby application into a standalone .exe file that embeds all of the application source, library and GEM files in embedded resources within the executable.
 
 The executable runs using IronRuby.
