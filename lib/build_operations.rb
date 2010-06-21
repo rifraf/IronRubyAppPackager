@@ -48,6 +48,12 @@ module IRPackager
     app_dir  = File.join(image_folder, 'App')
     Dir.mkdir(app_dir) unless File.exists?(app_dir)
     FileUtils.copy(project, app_dir)
+    boot_file = '_boot_.' + project
+    if File.exists?(boot_file)
+      boot_dir = File.join(app_dir, 'EmbeddedRuby')
+      Dir.mkdir(boot_dir) unless File.exists?(boot_dir)
+      FileUtils.copy(boot_file, File.join(boot_dir, 'AppBoot.rb'))
+    end
     folders.each do |folder|
       FileUtils.cp_r folder, File.join(app_dir, folder), :verbose => true
     end
@@ -88,8 +94,14 @@ module IRPackager
 
   def self.mount_info(app_dir, folders)
     app_root = File.basename(app_dir)
+    full_path_to_app = File.expand_path(app_dir)
+
     ret = "er.Mount(\"#{app_root}\")"
-    folders.each {|folder| ret << ".Mount(@\"#{app_root}\\\\#{folder}\")"}
+    folders.each do |folder|
+      full_path = File.expand_path(File.join(app_dir,folder))
+      subfolder = full_path[(full_path_to_app.length + 1)..-1]
+      ret << ".Mount(@\"#{app_root}\\\\#{subfolder}\")"
+    end
     ret << ';'
     puts ret
     return ret
