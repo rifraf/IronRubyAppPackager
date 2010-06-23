@@ -1,29 +1,29 @@
-h1. IRPackager
+h1. Overview
 
-*** NOTE : Work in progress. Only tested on a VERY simple application so far *******
-
-IRPackager is a Ruby library that packages a Ruby application into a standalone .exe file that embeds all of the application source, library and GEM files in embedded resources within the executable.
+IronRubyAppPackager is a solution that allows you to 'compile'[1] your application and its libraries into a single standalone .exe file that embeds all of the application source, library and GEM files in embedded resources within the executable.
 
 The executable runs using IronRuby.
 
-Run-time dependencies:
+Example programs are included in this repository for guidance. In particular there is a very simple [[DRB test]] and a [[Sample Sinatra App]].
 
-* .Net version 2 needs to be installed on any PC that runs the executable
-* IronRuby (though the DLLs can just be copied to the folder containing the executable)
+h2. Run-time dependencies:
 
-Package-time dependencies
+* .Net version 2 needs to be installed on any PC that runs the executable (at the moment)
+* IronRuby (or you can just copy the run-time DLLs to the folder containing the executable)
+
+h2. Package-time dependencies
 
 * "Serfs":http://github.com/rifraf/Serfs
 * "IREmbeddedApp":http://github.com/rifraf/IronRubyEmbeddedApps/
-* Vendorize
+* "Vendorize":http://github.com/rifraf/Vendorize
 * .Net version 2
 * (Optional) "ILMerge":http://research.microsoft.com/en-us/people/mbarnett/ILMerge.aspx
 
-h2. Quick run-through
+h1. How do I use it?
 
 Given an existing Ruby application (that runs with IronRuby), just run @ir -rvendorize app.rb@.
 
-This will copy any @require@ files into the folder @_vendor_@.
+This will copy any @require@, @load@ or @autoload@ files into the folder @.\_vendor_@.
 
 You can run the program several times with different options if the required files depend on the options.
 
@@ -31,22 +31,24 @@ Or just run your tests...
 
 Then run IRPackager which will generate a C# project that embeds your source files and @_vendor_@ files. It will build the project and deliver you a nice shiny .exe file.
 
-....... detail to follow ......
+h1. Issues
 
-h2. TODOs
+* Depends on Serfs and IREmbeddedApp, which don't support all File/IO operations on embedded resources yet. But there is enough to run many apps, and work is continuing. Feedback would be welcomed about areas that are not yet implemented.
 
-* Add the code....!
-* GEMify
-* Obscure files
-* Zip/unzip resources
-* Check Ocra/rubyscript2exe for edge cases / options
-* .net 3.5/4 options
-* ILMerge
-* Allow user-supplied program.cs file
-* Allow user-supplied .csproj file
+h1. Not what you are looking for?
 
-h2. License
+Try
+
+* "OCRA":http://github.com/larsch/ocra
+
+h1. License
 
 Copyright (c) 2010 David Lake (rifraf -> rifraf.net)
 
 Released under the MIT license. See LICENSE file for details.
+
+==<hr />==
+
+fn1. As always, phrases that are 'quoted' should be interpreted as having the prefix 'not'[2]. IronRubyAppPackager does not compile Ruby. It just looks like it's compiled, and behaves like it's compiled... Quack!
+
+fn2. Recursively of course
