@@ -1,2 +1,4 @@
 .svn
 nbproject
+hello_drb/_*
+hello_sinatra/_*

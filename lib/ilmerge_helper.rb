@@ -29,5 +29,6 @@ module ILMergeHelper
     return false unless ilmerge
     project_name = File.basename(project, '.rb')
     puts `#{ilmerge} #{image_folder}\\#{project_name}.exe /out:#{project_name}.exe #{image_folder}\\IREmbeddedApp.dll #{image_folder}\\Serfs.dll /ndebug`
+    true
   end
 end
