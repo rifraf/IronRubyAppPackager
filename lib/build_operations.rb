@@ -49,11 +49,13 @@ module IRPackager
     Dir.mkdir(app_dir) unless File.exists?(app_dir)
     FileUtils.copy(project, app_dir)
     boot_file = '_boot_.' + project
-    if File.exists?(boot_file)
-      boot_dir = File.join(app_dir, 'EmbeddedRuby')
-      Dir.mkdir(boot_dir) unless File.exists?(boot_dir)
-      FileUtils.copy(boot_file, File.join(boot_dir, 'AppBoot.rb'))
-    end
+    boot_cmd = '# Prevent rubygems from getting loaded
+$" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
+'
+    boot_cmd << IO.read(boot_file) if File.exists?(boot_file)
+    boot_dir = File.join(app_dir, 'EmbeddedRuby')
+    Dir.mkdir(boot_dir) unless File.exists?(boot_dir)
+    File.open(File.join(boot_dir, 'AppBoot.rb'),"w") {|h| h.puts boot_cmd}
     folders.each do |folder|
       FileUtils.cp_r folder, File.join(app_dir, folder), :verbose => true
     end
