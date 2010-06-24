@@ -59,6 +59,8 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
     folders.each do |folder|
       FileUtils.cp_r folder, File.join(app_dir, folder), :verbose => true
     end
+    require 'Compression'
+    Compress.in_place(app_dir) unless ENV['_IRPACKAGER_NOZIP_']
     return app_dir
   end
 

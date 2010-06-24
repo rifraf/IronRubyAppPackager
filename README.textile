@@ -1,6 +1,6 @@
 h1. Overview
 
-IronRubyAppPackager is a solution that allows you to 'compile'[1] your application and its libraries into a single standalone .exe file that embeds all of the application source, library and GEM files in embedded resources within the executable.
+IronRubyAppPackager is a solution that allows you to 'compile'[1] your application and its libraries into a single standalone .exe file that embeds all of the application source, library and GEM files in embedded resources (compressed) within the executable.
 
 The executable runs using IronRuby.
 
