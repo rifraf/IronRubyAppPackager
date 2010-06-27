@@ -21,17 +21,35 @@ namespace PROJECTNAMEConsole {
             return exitcode;
         }
 
+        // Unzip files that have the GZip marker. Convert the
+        // stream into a MemoryStream from a GZipStream because
+        // GZipStream is not able to supply length or eof indication,
+        // nor can it be repositioned. This makes it hard to support
+        // it with the Ruby IO class.
         private class GZipDecoder : IStreamDecoder {
             public Stream Decode(Stream stream) {
+                const int bufsize = 32768;
                 BinaryReader breader = new BinaryReader(stream);
                 byte[] bbuffer = breader.ReadBytes(2);
                 stream.Position = 0;
                 if ((bbuffer[0] == 31) && (bbuffer[1] == 139)) {
-                    stream = new GZipStream(stream, CompressionMode.Decompress, true);
+                    using (GZipStream zipStream = new GZipStream(stream, CompressionMode.Decompress)) {
+                        MemoryStream ms = new MemoryStream();
+                        using (BinaryReader zipreader = new BinaryReader(zipStream)) {
+                            while (true) {
+                                bbuffer = zipreader.ReadBytes(bufsize);
+                                ms.Write(bbuffer, 0, bbuffer.Length);
+                                if (bbuffer.Length < bufsize) {
+                                    break;
+                                }
+                            }
+                        }
+                        stream.Close();
+                        ms.Position = 0;
+                        return ms;
+                    }
                 }
-
-                StreamReader reader =  new StreamReader(stream);
-                return new MemoryStream(Encoding.UTF8.GetBytes(reader.ReadToEnd()));
+                return stream;
             }
         }
     }

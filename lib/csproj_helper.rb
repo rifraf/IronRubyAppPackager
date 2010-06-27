@@ -54,33 +54,42 @@ def check_all_resources_are_in_csproj(doc, app_dir)
   end
   embedded_resources = XPath.match( doc, "//ItemGroup/EmbeddedResource").select {|e| (e.attributes['Include'] || '') =~ /^#{app_root}\\/}
   resources_in_csproj = embedded_resources.collect {|element| convert_unicode(element.attributes['Include']) }
-  resources_on_disk = files_in(app_root)
+  resources_on_disk = {}
   holder = nil
-  resources_on_disk.each {|f|
-    unless resources_in_csproj.include?(f)
-      if ignored_files.include?(f)
-        puts "Ignoring: #{f}"
-      else
-        unless holder
-          holder = doc.root.add_element('ItemGroup')
+  File.open(File.join(app_root, '_SerfsDirInfo_'),"w") do |dir_info_h|
+    scan_files_on_disk(app_root, resources_on_disk) {|filename|
+      unless resources_in_csproj.include?(filename)
+        if ignored_files.include?(filename)
+          puts "Ignoring: #{filename}"
+        else
+          unless holder
+            holder = doc.root.add_element('ItemGroup')
+          end
+          puts "Adding: #{filename}"
+          holder.add_element('EmbeddedResource', {'Include' => filename})
         end
-        puts "Adding: #{f}"
-        holder.add_element('EmbeddedResource', {'Include' => f})
+      else
+        #puts "OK #{f}"
       end
-    else
-      #puts "OK #{f}"
-    end
-  }
+    }
+    dir_info_h.puts resources_on_disk.inspect
+  end
+
 end
 
-def files_in(dir)
+
+def scan_files_on_disk(dir, filemap, &blk)
   entries = Dir.entries(dir).delete_if {|e| (e =~ /^\./)}.map {|e| "#{dir}\\#{e}"}
   files = entries.select {|e| File.stat(e).file? }
   dirs  = entries.select {|e| File.stat(e).directory? }
+  filemap[:files] = files.map {|full| full[/[^\\\/]*$/]} # names only
+  filemap[:dirs] = {}
+  files.each {|f| yield f }
   dirs.each {|d|
-    files += files_in(d)
+    dname = d[/[^\\\/]*$/]
+    filemap[:dirs][dname] = {}
+    scan_files_on_disk(d, filemap[:dirs][dname], &blk)
   }
-  files
 end
 
 #

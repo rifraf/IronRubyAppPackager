@@ -1,0 +1,15 @@
+OK NOW? - Failed with hello.rb when it had no requires because the cp_r didn't like there being no vendor cache folder. ok non-serfs
+OK NOW?  - at moment has a require in place
+DONE: - Bigger unzip buffer
+DONE: - Fix silly crash when no args
+DONE: - require of rexml => include goes to wrong object
+
+- Need to implement Dir[] for *.dll copies
+- Fix the load/wrap issue
+- Include vendorize
+- Only add gzip decoder if needed
+- Split program.cs into 2 files so that program.cs passes args to secondary.
+  That way can more easily intercept args in program and only pass, say, any
+  after a '--' on to packaged app. Easier to support dogfood app options.
+- Fully test/implement Serfs IO/File/Dir
+- Backup needed on GitHub wikis?

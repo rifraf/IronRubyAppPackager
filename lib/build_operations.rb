@@ -39,9 +39,16 @@ module IRPackager
   end
 
   def self.clone_build_support(image_folder)
+    # TODO: support Dir[] in Serfs
     Dir[File.join(File.dirname(__FILE__), '*.dll')].each do |file|
-      FileUtils.cp file, image_folder, :verbose => true
+puts "+++++++> #{file}"
+#      FileUtils.cp file, image_folder, :verbose => true
     end
+
+puts "+++++++ #{File.join(File.dirname(__FILE__), 'Serfs.dll')}"
+FileUtils.cp File.join(File.dirname(__FILE__), 'Serfs.dll'), image_folder, :verbose => true
+FileUtils.cp File.join(File.dirname(__FILE__), 'IREmbeddedApp.dll'), image_folder, :verbose => true
+puts "+++++++ "
   end
 
   def self.clone_source_files(image_folder, project, folders)
@@ -57,7 +64,7 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
     Dir.mkdir(boot_dir) unless File.exists?(boot_dir)
     File.open(File.join(boot_dir, 'AppBoot.rb'),"w") {|h| h.puts boot_cmd}
     folders.each do |folder|
-      FileUtils.cp_r folder, File.join(app_dir, folder), :verbose => true
+      FileUtils.cp_r(folder + '/.', File.expand_path(app_dir), :verbose => true) if File.exists?(folder)
     end
     require 'Compression'
     Compress.in_place(app_dir) unless ENV['_IRPACKAGER_NOZIP_']
@@ -72,10 +79,10 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
       Dir.mkdir destdir unless File.exists? destdir
       source_info = File.join(File.dirname(__FILE__), 'AssemblyInfo.cs')
       FileUtils.cp source_info, destdir, :verbose => true
-      assemby_info = File.read(destfile)
-      assemby_info.gsub! /PROJECTNAME/, project_name
-      assemby_info.gsub! /YEAR/, Date.today.year.to_s
-      File.open(destfile, 'wb') {|f| f.write assemby_info}
+      assembly_info = File.read(destfile)
+      assembly_info.gsub! /PROJECTNAME/, project_name
+      assembly_info.gsub! /YEAR/, Date.today.year.to_s
+      File.open(destfile, 'wb') {|f| f.write assembly_info}
     end
     return destfile
   end
@@ -98,16 +105,16 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
 
   def self.mount_info(app_dir, folders)
     app_root = File.basename(app_dir)
-    full_path_to_app = File.expand_path(app_dir)
+#    full_path_to_app = File.expand_path(app_dir)
 
     ret = "er.Mount(\"#{app_root}\")"
-    folders.each do |folder|
-      full_path = File.expand_path(File.join(app_dir,folder))
-      subfolder = full_path[(full_path_to_app.length + 1)..-1]
-      ret << ".Mount(@\"#{app_root}\\\\#{subfolder}\")"
-    end
+#    folders.each do |folder|
+#      full_path = File.expand_path(File.join(app_dir,folder))
+#      subfolder = full_path[(full_path_to_app.length + 1)..-1]
+#      ret << ".Mount(@\"#{app_root}\\\\#{subfolder}\")"
+#    end
     ret << ';'
-    puts ret
+#    puts ret
     return ret
   end
 
