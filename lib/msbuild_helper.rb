@@ -17,11 +17,11 @@ module MSBuildHelper
       `#{msbuild} /version`
     rescue
       # IronRuby 1.0 comes here if msbuild not found
-      puts "MSBuild was not found. Please add it to the path."
+      puts "MSBuild was not found. Please add it to the path.".red
       exit(2)
     end
     if ($?.exitstatus > 0)
-      puts "MSBuild was not found. Please add it to the path."
+      puts "MSBuild was not found. Please add it to the path.".red
       exit(1)
     end
     msbuild
@@ -29,7 +29,7 @@ module MSBuildHelper
 
   def self.build(image_folder, project)
     Dir.chdir(image_folder) do
-      puts `#{self.find_msbuild} #{File.basename(project, '.rb')}.csproj`
+      puts `#{self.find_msbuild} #{File.basename(project, '.rb')}.csproj`.cyan
     end
     return File.join(image_folder, 'bin').gsub(/\//,'\\')
   end

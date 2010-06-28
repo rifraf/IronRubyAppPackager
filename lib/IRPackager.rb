@@ -1,35 +1,41 @@
 #
 # Usage: ir IRPackager.rb <main>.rb [vendor_foldernames..]
 #
-require 'pp'
+
+#require 'pp'
 
 # TEMP patches need moving
 if defined?(SERFS)
 
-  class Dir
+  if File.exist?('/_SerfsDirInfo_')
+    load '/_SerfsDirInfo_'
+    p SerfsDirInfo
 
-    class << self
-      alias_method :irembedded_old_stat, :'[]'
-      def [](*args)
-        results = irembedded_old_stat(*args)
-#        results << local_glob(args,0)
-puts "+++++++ #{__LINE__}"
-        puts args
-puts "+++++++ #{__LINE__}"
-#       puts SerfsInstance.ResourceNames
-puts "+++++++ #{__LINE__}"
-        results
+    class Dir
+
+      class << self
+        alias_method :irembedded_old_stat, :'[]'
+        def [](*args)
+          results = irembedded_old_stat(*args)
+  #        results << local_glob(args,0)
+  puts "+++++++ #{__LINE__}".magenta
+          puts args
+  puts "+++++++ #{__LINE__}".magenta
+  #       puts SerfsInstance.ResourceNames
+  puts "+++++++ #{__LINE__}".magenta
+          results
+        end
+
+        alias_method :irembedded_old_glob, :glob
+        def glob(*args)
+          results = irembedded_old_glob(*args)
+  puts "------- #{__LINE__}"
+          puts args
+  puts "------- #{__LINE__}"
+          results
+        end
+
       end
-
-      alias_method :irembedded_old_glob, :glob
-      def glob(*args)
-        results = irembedded_old_glob(*args)
-puts "------- #{__LINE__}"
-        puts args
-puts "------- #{__LINE__}"
-        results
-      end
-
     end
   end
 
@@ -37,8 +43,11 @@ puts "------- #{__LINE__}"
 #  end
 end
 
+$LOAD_PATH.unshift File.dirname(__FILE__)
+require 'colour_support'
+
 if ARGV.length == 0
-  puts "No arguments supplied.\nArgs are: <progname>.rb [[cache_folder]]"
+  puts "No arguments supplied.\nArgs are: <progname>.rb [[cache_folder]]".red
   exit(1)
 end
 
@@ -48,7 +57,6 @@ def ir_build_folder
 end
 
 
-$LOAD_PATH.unshift File.dirname(__FILE__)
 require 'build_operations'
 
 # What are we building?

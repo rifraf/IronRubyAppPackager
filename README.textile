@@ -1,8 +1,12 @@
 h1. Overview
 
+<< Work in progress >>
+
 IronRubyAppPackager is a solution that allows you to 'compile'[1] your application and its libraries into a single standalone .exe file that embeds all of the application source, library and GEM files in embedded resources (compressed) within the executable.
 
 The executable runs using IronRuby.
+
+IronRubyAppPackager is supplied as a simple Ruby application. However it can be 'dogfooded'. i.e. It can be run on itself and generate the executable @IronRubyAppPackager.exe@, simplifying deployment. See "here":http://github.com/rifraf/IronRubyAppPackager/tree/master/dogfood/.
 
 Example programs are included in this repository for guidance. In particular there is a very simple [[DRB test]] and a [[Sample Sinatra App]].
 

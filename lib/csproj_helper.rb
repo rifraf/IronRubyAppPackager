@@ -65,18 +65,21 @@ def check_all_resources_are_in_csproj(doc, app_dir)
           unless holder
             holder = doc.root.add_element('ItemGroup')
           end
-          puts "Adding: #{filename}"
+          puts "Adding: #{filename}".yellow
           holder.add_element('EmbeddedResource', {'Include' => filename})
         end
       else
         #puts "OK #{f}"
       end
     }
-    dir_info_h.puts resources_on_disk.inspect
+    write_directory_info dir_info_h, resources_on_disk.inspect
   end
 
 end
 
+def write_directory_info file_handle, dir_info
+  file_handle.puts "SerfsDirInfo = #{dir_info}"
+end
 
 def scan_files_on_disk(dir, filemap, &blk)
   entries = Dir.entries(dir).delete_if {|e| (e =~ /^\./)}.map {|e| "#{dir}\\#{e}"}
@@ -124,9 +127,9 @@ def sync_csproj(csproj_file, app_dir)
   if current != reference
     File.open(csproj_file, "w") do |f|
       f.print current
-      puts "Updated #{csproj_file}"
+      puts "Updated #{csproj_file}".green
     end
   else
-    puts "Checked #{csproj_file}"
+    puts "Checked #{csproj_file}".green
   end
 end

@@ -41,14 +41,14 @@ module IRPackager
   def self.clone_build_support(image_folder)
     # TODO: support Dir[] in Serfs
     Dir[File.join(File.dirname(__FILE__), '*.dll')].each do |file|
-puts "+++++++> #{file}"
+puts "+++++++> #{file}".magenta
 #      FileUtils.cp file, image_folder, :verbose => true
     end
 
-puts "+++++++ #{File.join(File.dirname(__FILE__), 'Serfs.dll')}"
-FileUtils.cp File.join(File.dirname(__FILE__), 'Serfs.dll'), image_folder, :verbose => true
-FileUtils.cp File.join(File.dirname(__FILE__), 'IREmbeddedApp.dll'), image_folder, :verbose => true
-puts "+++++++ "
+puts "+++++++ #{File.join(File.dirname(__FILE__), 'Serfs.dll')}".magenta
+FileUtils.cp File.join(File.dirname(__FILE__), 'Serfs.dll'), image_folder #, :verbose => true
+FileUtils.cp File.join(File.dirname(__FILE__), 'IREmbeddedApp.dll'), image_folder #, :verbose => true
+puts "+++++++ ".magenta
   end
 
   def self.clone_source_files(image_folder, project, folders)
@@ -64,7 +64,7 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
     Dir.mkdir(boot_dir) unless File.exists?(boot_dir)
     File.open(File.join(boot_dir, 'AppBoot.rb'),"w") {|h| h.puts boot_cmd}
     folders.each do |folder|
-      FileUtils.cp_r(folder + '/.', File.expand_path(app_dir), :verbose => true) if File.exists?(folder)
+      FileUtils.cp_r(folder + '/.', File.expand_path(app_dir), :verbose => false) if File.exists?(folder)
     end
     require 'Compression'
     Compress.in_place(app_dir) unless ENV['_IRPACKAGER_NOZIP_']
@@ -78,7 +78,7 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
     unless File.exists?(destfile)
       Dir.mkdir destdir unless File.exists? destdir
       source_info = File.join(File.dirname(__FILE__), 'AssemblyInfo.cs')
-      FileUtils.cp source_info, destdir, :verbose => true
+      FileUtils.cp source_info, destdir #, :verbose => true
       assembly_info = File.read(destfile)
       assembly_info.gsub! /PROJECTNAME/, project_name
       assembly_info.gsub! /YEAR/, Date.today.year.to_s
@@ -93,7 +93,7 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
     destfile = File.join(destdir, "#{project_name}.cs")
     unless File.exists?(destfile)
       source = File.join(File.dirname(__FILE__), 'Program.cs')
-      FileUtils.cp source, destfile, :verbose => true
+      FileUtils.cp source, destfile #, :verbose => true
       source_code = File.read(destfile)
       source_code.gsub! /PROJECTNAME/, project_name
       source_code.gsub! /YEAR/, Date.today.year.to_s
@@ -123,7 +123,7 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
     destfile = File.join(destdir, "#{project_name}.csproj")
     unless File.exists?(destfile)
       source = File.join(File.dirname(__FILE__), 'Program.csproj')
-      FileUtils.cp source, destfile, :verbose => true
+      FileUtils.cp source, destfile #, :verbose => true
       source_code = File.read(destfile)
       source_code.gsub! /PROJECTNAME/, project_name
       source_code.gsub! /YEAR/, Date.today.year.to_s
@@ -140,9 +140,9 @@ $" << \'rubygems.rb\' << \'rubygems\' unless ENV[\'_IRPACKAGER_KEEP_GEMS_\']
   def self.build_csproject(image_folder, project)
     location = MSBuildHelper.build(image_folder, project)
     if ILMergeHelper.build(location, project)
-      puts "*** Created #{File.basename(project,'.rb')}.exe (single file) ***"
+      puts "*** Created #{File.basename(project,'.rb')}.exe (single file) ***".green
     else
-      puts "*** Created #{location}\\#{File.basename(project,'.rb')}.exe (plus 2 support DLLs) ***"
+      puts "*** Created #{location}\\#{File.basename(project,'.rb')}.exe (plus 2 support DLLs) ***".green
     end
   end
   
