@@ -2,3 +2,6 @@
 nbproject
 hello_drb/_*
 hello_sinatra/_*
+**/_*
+**/log*
+**/*.log

@@ -89,7 +89,7 @@ def scan_files_on_disk(dir, filemap, &blk)
   filemap[:dirs] = {}
   files.each {|f| yield f }
   dirs.each {|d|
-    dname = d[/[^\\\/]*$/]
+    dname = d[/[^\\\/]*$/].downcase
     filemap[:dirs][dname] = {}
     scan_files_on_disk(d, filemap[:dirs][dname], &blk)
   }
