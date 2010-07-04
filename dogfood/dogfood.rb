@@ -1,5 +1,6 @@
 puts "<<<<<<<<<<<<<< woof >>>>>>>>>>>>>>>>>>>"
 
+require 'pp'
 require 'test/unit'
 
 if defined?(SERFS)
